@@ -1,4 +1,4 @@
-name: signac_numpy_tutorial
+name: signac_pytorch_pl_mnist_example
 channels:
   - conda-forge
 dependencies:
