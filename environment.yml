@@ -1,0 +1,10 @@
+name: signac_numpy_tutorial
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - numpy
+  - signac
+  - signac-flow
+  - signac-dashboard
+
