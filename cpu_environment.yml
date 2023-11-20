@@ -1,0 +1,11 @@
+name: cpu_signac_pytorch_pl_mnist_example
+channels:
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.10
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - conda-forge::pytorch-lightning
+  - conda-forge::matplotlib
+
