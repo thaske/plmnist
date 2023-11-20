@@ -1,0 +1,1 @@
+# signac_pytorch_pl_mnist_example
