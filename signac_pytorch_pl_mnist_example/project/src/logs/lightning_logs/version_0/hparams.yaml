@@ -1,5 +1,0 @@
-batch_size: 256
-data_dir: ./data
-dropout_prob: 0.1
-hidden_size: 64
-learning_rate: 0.0002

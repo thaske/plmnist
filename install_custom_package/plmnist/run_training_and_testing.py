@@ -2,8 +2,11 @@ import argparse
 
 import pytorch_lightning as pl
 
-from plmnist import train, test, write, fgsm_from_path, plot_fgsm
-from plmnist.config import (
+from plmnist import train, test, write
+
+from fgsm import fgsm_from_path, plot_fgsm
+
+from config import (
     NUM_EPOCHS,
     LOG_PATH,
     RESULT_PATH,
@@ -15,6 +18,7 @@ from plmnist.config import (
     SEED,
     FGSM_EPSILON,
 )
+
 
 
 if __name__ == "__main__":

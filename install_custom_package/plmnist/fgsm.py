@@ -5,8 +5,8 @@ import pytorch_lightning as pl
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
-from plmnist.plmnist import LitMNIST
-from plmnist.config import FGSM_EPSILON, RESULT_PATH, SEED
+from model import LitMNIST
+from config import FGSM_EPSILON, RESULT_PATH, SEED
 
 
 # based on https://pytorch.org/tutorials/beginner/fgsm_tutorial.html#fgsm-attack
