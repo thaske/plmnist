@@ -1,8 +1,0 @@
-[project]
-name = "signac_pytorch_pl_mnist_example"
-version = "0.0.1"
-authors = [{name = "Michael Klamkin", email = "klam@isye.gatech.edu"}]
-authors = [{name = "Brad Crawford", email = "bcrawford39@gatech.edu"}]
-
-[tool.setuptools.packages.find]
-include = ["plmnist*"]

@@ -3,9 +3,12 @@ channels:
   - pytorch
   - nvidia
 dependencies:
-  - python=3.10
+  - python=3.11
+  - numpy=1.24.0
   - pytorch::pytorch
   - pytorch::torchvision
   - conda-forge::pytorch-lightning
   - conda-forge::matplotlib
-
+  - signac
+  - signac-flow
+  - signac-dashboard
