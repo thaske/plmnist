@@ -4,7 +4,6 @@
 import os
 from flow import FlowProject, aggregator
 import hpc_setup
-#import plmnist.download as download
 #from run_training_and_testing import run_training_and_testing 
 from plmnist import train, test, write
 from model import LitMNIST
@@ -213,10 +212,13 @@ def part_2_download_the_dataset_completed(job):
 )
 def part_2_download_the_dataset_command(job):  
     """write the plmnist input"""
+    # make the data directory
+    if os.path.isdir(f'{downloaded_data_directory_name_relative_to_each_job}') is False:
+        os.mkdir(f'{downloaded_data_directory_name_relative_to_each_job}')
 
     # Download the data set via a bash command
-    return f"python download_dataset --data_dir {downloaded_data_directory_name_relative_to_each_job}"
-
+    return f"python {plmnist_directory_directory_name_relative_to_each_job}/download.py " \
+           f"--data_dir {downloaded_data_directory_name_relative_to_each_job}"
 
 # ******************************************************
 # ******************************************************
