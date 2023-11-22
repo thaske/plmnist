@@ -69,9 +69,15 @@ conda env create --file cpu_environment.yml
 conda env create --file gpu_environment.yml
 ```
 
-##### Activate conda:
+##### Activate the conda environment:
+ - For CPU-only installation: 
 ```bash
-conda activate signac_pytorch_plmnist_example
+conda activate cpu_signac_pytorch_plmnist_example
+```
+
+ - For GPU installation: 
+```bash
+conda activate gpu_signac_pytorch_plmnist_example
 ```
 
 #### Install the plmnist package:
