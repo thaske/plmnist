@@ -4,7 +4,6 @@
 import os
 from flow import FlowProject, aggregator
 import hpc_setup
-#from run_training_and_testing import run_training_and_testing 
 from plmnist import train, test, write
 from model import LitMNIST
 from fgsm import fgsm_from_path, plot_fgsm
@@ -24,7 +23,6 @@ class Project(FlowProject):
 
     def __init__(self):
         super().__init__()
-
 
 # ******************************************************
 # ******************************************************
@@ -93,21 +91,37 @@ part_5_gpu_int = 0
 
 # ******************************************************
 # ******************************************************
-# CREATE THE INITIAL VARIABLES, WHICH WILL BE STORED IN 
-# EACH JOB (START)
+# SET THE PARAMETERS FOR SIGNAC 
+# AND THE FILE/FOLDER NAMES (START)
 # ******************************************************
 # ******************************************************
 
 # set data locations and names
 downloaded_data_directory_name_relative_to_each_job = '../../data'
+downloaded_data_directory_name_relative_to_project_py_file = 'data'
 plmnist_directory_directory_name_relative_to_each_job = '../../../install_custom_package/plmnist'
+plmnist_directory_directory_name_relative_to_project_py_file = '../install_custom_package/plmnist'
 output_avg_std_of_seed_txt_filename = "output_avg_std_of_seed_txt_filename"
 
 # SET THE PROJECTS DEFAULT DIRECTORY
 project_directory = f"{os.getcwd()}"
 print(f"project_directory = {project_directory}")
 
+# ******************************************************
+# ******************************************************
+# SET THE PARAMETERS FOR SIGNAC 
+# AND THE FILE/FOLDER NAMES (END)
+# ******************************************************
+# ******************************************************
 
+# ******************************************************
+# ******************************************************
+# CREATE THE INITIAL VARIABLES, WHICH WILL BE STORED IN 
+# EACH JOB (START)
+# ******************************************************
+# ******************************************************
+
+# Part 1: Check the statepoints (individual jobs/runs) are generated
 @Project.label
 def part_1_initial_parameters_completed(job):
     """Check that the data is generated and in the json files."""
@@ -117,7 +131,7 @@ def part_1_initial_parameters_completed(job):
 
     return data_written_bool
 
-
+# Run Part 1
 @Project.post(part_1_initial_parameters_completed)
 @Project.operation(directives=
     {
@@ -147,7 +161,6 @@ def part_1_initial_parameters_command(job):
     
     # Storing a calculated value for alter use
     job.doc.seed_times_batch_size_int = int(int(job.sp.seed_int) * int(job.sp.batch_size_int))
-
 
 # ******************************************************
 # ******************************************************
@@ -183,42 +196,43 @@ def statepoint_without_seed(job):
 # ******************************************************
 # ******************************************************
 
-# check if plmnist input files are written
+# Part 2: Check the data set is downloaded
 @Project.label
-def part_2_download_the_dataset_completed(job): 
+def part_2_download_the_dataset_completed(*job): 
     """Check that data is downloaded."""
     files_downloaded_bool = False
 
     # Look back 2 directories from the job folder, as for at least 1 file that was downloaded.
     # Note: yUou can check all files if you want by adding checks for all of them.
     check_one_data_file_relative_to_each_job = \
-        f"{downloaded_data_directory_name_relative_to_each_job}/MNIST/raw/t10k-images-idx3-ubyte"
+        f"{downloaded_data_directory_name_relative_to_project_py_file}/MNIST/raw/t10k-images-idx3-ubyte"
     if (
-        job.isfile(check_one_data_file_relative_to_each_job) is True
+        os.path.isdir(downloaded_data_directory_name_relative_to_project_py_file) is True
         ):
         files_downloaded_bool = True
 
     return files_downloaded_bool
 
-@Project.pre(part_1_initial_parameters_completed)
+# Run Part 2 as only 1 job
+@Project.pre(lambda *jobs: all(part_1_initial_parameters_completed(j) for j in jobs[0]._project))
 @Project.post(part_2_download_the_dataset_completed)
 @Project.operation(directives=
-    {
-        "np": part_2_cpu_int,
-        "ngpu": part_2_gpu_int,
-        "memory": part_2_memory_gb,
-        "walltime": part_2_walltime_hr,
-    }, with_job=True, cmd=True
+     {
+         "np": part_2_cpu_int,
+         "ngpu": part_2_gpu_int,
+         "memory": part_2_memory_gb,
+         "walltime": part_2_walltime_hr,
+     }, cmd=True, aggregator=aggregator(select=lambda x: 1 > 0) # make only 1 job
 )
-def part_2_download_the_dataset_command(job):  
+def part_2_download_the_dataset_command(*jobs):  
     """write the plmnist input"""
     # make the data directory
-    if os.path.isdir(f'{downloaded_data_directory_name_relative_to_each_job}') is False:
-        os.mkdir(f'{downloaded_data_directory_name_relative_to_each_job}')
+    if os.path.isdir(f'{downloaded_data_directory_name_relative_to_project_py_file}') is False:
+        os.mkdir(f'{downloaded_data_directory_name_relative_to_project_py_file}')
 
     # Download the data set via a bash command
-    return f"python {plmnist_directory_directory_name_relative_to_each_job}/download.py " \
-           f"--data_dir {downloaded_data_directory_name_relative_to_each_job}"
+    return f"python {plmnist_directory_directory_name_relative_to_project_py_file}/download.py " \
+           f"--data_dir {downloaded_data_directory_name_relative_to_project_py_file}"
 
 # ******************************************************
 # ******************************************************
@@ -233,7 +247,7 @@ def part_2_download_the_dataset_command(job):
 # ******************************************************
 # ******************************************************
 
-# check to see if the test, train, and write completed correctly
+# Part 3: check to see if the test, train, and write completed correctly
 @Project.label
 def part_3_train_test_write_completed(job):
     """Check if the training, testing, and writing are completed properly."""
@@ -244,7 +258,7 @@ def part_3_train_test_write_completed(job):
 
     return job_run_properly_bool
 
-
+# Run Part 3
 @Project.pre(part_2_download_the_dataset_completed)
 @Project.post(part_3_train_test_write_completed)
 @Project.operation(directives=
@@ -282,8 +296,6 @@ def part_3_train_test_write_command(job):
           f"--no_fgsm "
         )
 
-
-
 # ******************************************************
 # ******************************************************
 # TRAIN, TEST, AND WRITE OUTPUT FILES  (END)
@@ -298,7 +310,7 @@ def part_3_train_test_write_command(job):
 # ******************************************************
 # ******************************************************
 
-# check to see if the test, train, and write completed correctly
+# Part 4: check to see if the test, train, and write completed correctly
 @Project.label
 def part_4_fgsm_attack_completed(job):
     """Check if the training, testing, and writing are completed properly."""
@@ -323,7 +335,7 @@ def part_4_fgsm_attack_completed(job):
 
     return job_run_properly_bool
 
-
+# Run Part 4
 @Project.pre(part_3_train_test_write_completed)
 @Project.post(part_4_fgsm_attack_completed)
 @Project.operation(directives=
@@ -370,7 +382,7 @@ def part_4_fgsm_attack_command(job):
 # ******************************************************
 # ******************************************************
 
-# Check if the average and std. dev. of all the replicate (seed) is completed
+# Part 5: Check if the average and std. dev. of all the replicate (seed) is completed
 @Project.label
 def part_5_analysis_seed_averages_completed(*jobs):
     """Check that the replicate (seed) averages files are written ."""
@@ -393,7 +405,7 @@ def part_5_analysis_seed_averages_completed(*jobs):
 
     return all_file_written_bool_pass
 
-
+# Run Part 5
 @Project.pre(lambda *jobs: all(part_4_fgsm_attack_completed(j)
                                for j in jobs[0]._project))
 @Project.post(part_5_analysis_seed_averages_completed)
@@ -552,7 +564,6 @@ def part_5_analysis_seed_averages_command(*jobs):
     )
 
     seed_calc_txt_file.close()
-
 
 # ******************************************************
 # ******************************************************
