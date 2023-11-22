@@ -69,7 +69,7 @@ conda env create --file cpu_environment.yml
 conda env create --file gpu_environment.yml
 ```
 
-#### Install the main signac packages:
+#### Install the plmnist package:
 ```bash
 cd install_custom_package/plmnist 
 ```
