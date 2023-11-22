@@ -60,9 +60,10 @@ Vagrantfile
 
 #conda version
 __conda_version__.txt
-signac_numpy_tutorial/version.py
+signac_pytorch_plmnist_example/version.py
 
 #virtual env
 .env/
 
-
+#signac
+.signac/

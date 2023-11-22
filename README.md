@@ -1,5 +1,5 @@
-## Signac Workflow Tutorial: pl-mnist Example using Pytorch
------------------------------------------------------------
+## Signac Workflow Tutorial: plmnist Example using Pytorch
+----------------------------------------------------------
 
 ### General Notes
 
@@ -18,18 +18,22 @@ Using `signac` workflows provide the following benefits:
 
 ### Overview
 
-This is a `signac` Workflow example/tutorial for a simple Numpy calculation, which utilizes the following workflow steps:
+This is a `signac` Workflow example/tutorial for a pytorch using plmnist, which utilizes the following workflow steps:
 
  - **Part 1:** For each individual job (set of state points), this code generates the `signac_job_document.json` file from the `signac_statepoint.json` data.  The `signac_statepoint.json` only stores the set of state points or required variables for the given job.  The `signac_job_document.json` can be used to store any other variables that the user wants to store here for later use or searching. 
 
-- **Part 2:** This writes the input values into a file that `Numpy` will use to do a calculation in `Part 3`.  There are four (4) random numbers generated that used the initial `value_0_int` value and the `replicate_number_int` value to seed the random number generator.
+- **Part 2:** This downloads the dataset used for the pytorch and plmnist calculations, which will be used to do a calculation/model in `Part 3`.  
 
-- **Part 3:** Calulate the dot product of the four (4) random numbers generated in `Part 2` (4 numbers dot [1, 2, 3, 4]).  Also, run a bash command `echo "Running the echo command or any other bash command here"`, which is an example of how to run a bash command to run a software package inside the commands for each state point. 
+- **Part 3:** Run pytorch for the plmnist model without fgsm, using bash command to run a software package inside the commands for each state point. 
 
-- **Part 4:** Obtain the average and standard deviation for each input `value_0_int` value across all the replicates, and print the output data file (`analysis/output_avg_std_of_replicates_txt_filename.txt`).  Signac is setup to automatically loop through all the json files (`signac_statepoint.json`), calculating the average and standard deviation for the jobs with the state points that only have a different `replicate_number_int` numbers. 
+- **Part 4:** Run the fgsm on the model from `Part 3`, using bash command to run a software package inside the commands for each state point.  
+
+- **Part 5:** Obtain the average and standard deviation for each input value combination (`num_epochs`, `batch_size`, `hidden_size`, `learning_rate`, `dropout_prob`, `fgsm_epsilon`), with different `seed` values (replicates). The user can add more values at any time via the `init.py` file and rerun only the added value calculations.  The averages and standard deviations accoss the different `seed` values (replicates) are determined for the `test_acc_avg`, `test_acc_std`, `test_loss_avg`, `test_loss_std`, `val_acc_avg`, `val_acc_std`, `val_loss_avg`, `val_loss_std`, `fgsm_acc_avg`, and `fgsm_acc_std` values, and added to the `analysis/output_avg_std_of_seed_txt_filename.txt` file.
 
 #### Notes:
-- **src directory:** This directory can be used to store any custom function that are required for this workflow.  This includes any developed `Python` functions or any template files used for the custom workflow (Example: A base template file that is used for a find and replace function, changing the variables with the differing state point inputs).
+- **install_custom_package directory:** This directory is used to house the main `plmnist` package which is added to the conda package in the install instuctions. 
+
+- **src directory:** This directory can be used to store any other custom function that are required for this workflow.  This includes any developed `Python` functions or any template files used for the custom workflow (Example: A base template file that is used for a find and replace function, changing the variables with the differing state point inputs).  
 
 - **templates directory:** This directory is used to store the custom HPC submission scripts and any template files used for the custom workflow (Example: A base template file that is used for a find and replace function, changing the variables with the differing state point inputs).  These find and replace template files could also be put in the `src` directory, but the HPC submission scripts must remain in the `templates` directory.  **All the standard or custom module load commands, conda activate commands, and any other custom items that needed to be HPC submission scripts should in included here for every project (Example: Specific queues, CPU/GPU models, etc.).** 
 
@@ -41,26 +45,38 @@ This is a `signac` Workflow example/tutorial for a simple Numpy calculation, whi
 Please cite this GitHub repository.
 
  - This repository:  Add repository here
+ - The work is based on this repository: https://lightning.ai/docs/pytorch/stable/notebooks/lightning_examples
 
 ### Installation
 
 These signac workflows "this project" can be built using conda:
 
+#### Install the main signac packages:
 ```bash
-cd signac_numpy_tutorial
+cd signac_pytorch_plmnist_example
+```
+##### For CPU only installations:
+```bash
+conda env create --file cpu_environment.yml
+```
+
+##### For GPU installations:
+```bash
+conda env create --file gpu_environment.yml
+```
+
+#### Install the main signac packages:
+```bash
+cd install_custom_package/plmnist 
 ```
 
 ```bash
-conda env create -f environment.yml
-```
-
-```bash
-conda activate signac_numpy_tutorial
+pip install -e .
 ```
 
 ### Run the Workflow Locally
 
-All commands in this section are run from the `<local_path>/signac_numpy_tutorial/signac_numpy_tutorial/project` directory.
+All commands in this section are run from the `<local_path>/signac_pytorch_plmnist_example/signac_pytorch_plmnist_example/project` directory.
 
 Initialize all the state points for the jobs (generate all the separate folders with the same variables).  
  - Note: This command generates the `workspace` folder, which includes a sub-folder for each state point (different variable combinations),  These sub-folders are numbered uniquely based of the state point values.  The user can add more state points via the `init.py` file at any time, running the below command to create the new state points files and sub-folders that are in the `init.py` file.
@@ -84,25 +100,31 @@ python project.py run
 Run all available `part 1` sections of the project locally with the `run` command.
 
 ```bash
-python project.py run -o part_1_initial_parameters_command
+python python project.py run -o part_1_initial_parameters_command
 ```
 
 Run all available `part 2` sections of the project locally with the `run` command.
 
 ```bash
-python project.py run -o part_2_write_numpy_input_command
+python project.py run -o part_2_download_the_dataset_command
 ```
 
 Run all available `part 3` sections of the project locally with the `run` command.
 
 ```bash
-python project.py run -o part_3_numpy_calcs_command
+python project.py run -o part_3_train_test_write_command
 ```
 
 Run all available `part 4` sections of the project locally with the `run` command.
 
 ```bash
-python project.py run -o part_4_analysis_replicate_averages_command
+python project.py run -o part_4_fgsm_attack_command
+```
+
+Run all available `part 5` sections of the project locally with the `run` command.
+
+```bash
+python project.py run -o part_5_analysis_seed_averages_command
 ```
 
 Additionally, you can run the following flags for the  `run` command, controlling the how the jobs are executed on the local machine (does not produce HPC job submission scripts):
@@ -112,7 +134,7 @@ Additionally, you can run the following flags for the  `run` command, controllin
 
 ### Submit the Workflow Jobs to an HPC.  
 
-All commands in this section are run from the `<local_path>/signac_numpy_tutorial/signac_numpy_tutorial/project` directory.
+All commands in this section are run from the `<local_path>/signac_pytorch_plmnist_example/signac_pytorch_plmnist_example/project` directory.
 
 First, you need to be sure that the `templates/phoenix.sh` or the used HPC template file is correct for the given HPC.  Additionally, the `templates/phoenix.sh` file is correct for the given HPC in the `project.py` file, specifically it is setup for  the `DefaultSlurmEnvironment` (only for a Slurm enviroment), and the class for it is set properly (Example: `class Phoenix(DefaultSlurmEnvironment):`).  
 
@@ -125,7 +147,7 @@ Initialize all the state points for the jobs (generate all the separate folders 
 python init.py
 ```
 
-Check the status of your project (i.e., what parts are completed and what parts are available to be run).
+Check the status of your project (i.e., what parts are completed and what parts are available to be submitted).
 
 ```bash
 python project.py status
@@ -146,19 +168,24 @@ python project.py submit -o part_1_initial_parameters_command
 Submit all available `part 2` sections of the project to the HPC with the `submit` command.
 
 ```bash
-python project.py submit -o part_2_write_numpy_input_command
+python project.py submit -o part_2_download_the_dataset_command
 ```
 
 Submit all available `part 3` sections of the project to the HPC with the `submit` command.
 
 ```bash
-python project.py submit -o part_3_numpy_calcs_command
+python project.py submit -o part_3_train_test_write_command
 ```
-
 Submit all available `part 4` sections of the project to the HPC with the `submit` command.
 
 ```bash
-python project.py submit -o part_4_analysis_replicate_averages_command
+python project.py submit -o part_4_fgsm_attack_command
+```
+
+Submit all available `part 5` sections of the project to the HPC with the `submit` command.
+
+```bash
+python project.py submit -o part_5_analysis_seed_averages_command
 ```
 
 Additionally, you can run the following flags for the `submit` command, controlling the how the jobs are submitted to the HPC:
