@@ -59,17 +59,17 @@ part_2_memory_gb = 4
 part_2_cpu_int = 1
 part_2_gpu_int = 0
 
-part_3_walltime_hr = 0.3
+part_3_walltime_hr = 1
 part_3_memory_gb = 4
 part_3_cpu_int = 1
 part_3_gpu_int = 1
 
-part_4_walltime_hr = 1
+part_4_walltime_hr = 0.5
 part_4_memory_gb = 4
 part_4_cpu_int = 1
 part_4_gpu_int = 0
 
-part_5_walltime_hr = 0.4
+part_5_walltime_hr = 0.6
 part_5_memory_gb = 4
 part_5_cpu_int = 1
 part_5_gpu_int = 0
