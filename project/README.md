@@ -2,7 +2,7 @@
 --------------------
 
 ### Overview
-All the `signac` commands are run from the `<local_path>/signac_numpy_tutorial/signac_numpy_tutorial/project` directory, which include, but are not limited to the following commands:
+All the `signac` commands are run from the `<local_path>/signac_pytorch_plmnist_example/signac_pytorch_plmnist_example/project` directory, which include, but are not limited to the following commands:
  - State point initialization.
 ```bash
 python init.py
