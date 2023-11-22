@@ -100,7 +100,7 @@ part_5_gpu_int = 0
 
 # set data locations and names
 downloaded_data_directory_name_relative_to_each_job = '../../data'
-plmnist_directory_directory_name_relative_to_each_job = '../../../../install_custom_package/plmnist'
+plmnist_directory_directory_name_relative_to_each_job = '../../../install_custom_package/plmnist'
 output_avg_std_of_seed_txt_filename = "output_avg_std_of_seed_txt_filename"
 
 # SET THE PROJECTS DEFAULT DIRECTORY
