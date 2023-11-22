@@ -42,10 +42,14 @@ This is a `signac` Workflow example/tutorial for a pytorch using plmnist, which 
 
 ### Citation
 
-Please cite this GitHub repository.
+Please cite this GitHub repository and the repository in which the work was based off of.
 
  - This repository:  Add repository here
- - The work is based on this repository: https://lightning.ai/docs/pytorch/stable/notebooks/lightning_examples
+ - PyTorch Lightning. lightning.ai/docs/pytorch/stable/notebooks/lightning_examples, accessed November 2023.
+
+### Authors
+
+- Brad Crawford and Michael Klamkin. Signac Workflow Tutorial: plmnist Example using Pytorch. GitHub, 2023 
 
 ### Installation
 
