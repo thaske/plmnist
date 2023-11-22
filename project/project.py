@@ -24,7 +24,6 @@ class Project(FlowProject):
     def __init__(self):
         super().__init__()
 
-
 # ******************************************************
 # ******************************************************
 # ******************************************************
@@ -163,7 +162,6 @@ def part_1_initial_parameters_command(job):
     # Storing a calculated value for alter use
     job.doc.seed_times_batch_size_int = int(int(job.sp.seed_int) * int(job.sp.batch_size_int))
 
-
 # ******************************************************
 # ******************************************************
 # CREATE THE INITIAL VARIABLES, WHICH WILL BE STORED IN 
@@ -297,8 +295,6 @@ def part_3_train_test_write_command(job):
           f"--no_dhash "
           f"--no_fgsm "
         )
-
-
 
 # ******************************************************
 # ******************************************************
@@ -568,7 +564,6 @@ def part_5_analysis_seed_averages_command(*jobs):
     )
 
     seed_calc_txt_file.close()
-
 
 # ******************************************************
 # ******************************************************
