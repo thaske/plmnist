@@ -115,7 +115,7 @@ python project.py run
 Run all available `part 1` sections of the project locally with the `run` command.
 
 ```bash
-python python project.py run -o part_1_initial_parameters_command
+python project.py run -o part_1_initial_parameters_command
 ```
 
 Run all available `part 2` sections of the project locally with the `run` command.
