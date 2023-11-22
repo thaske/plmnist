@@ -144,6 +144,11 @@ def part_1_initial_parameters_completed(job):
 def part_1_initial_parameters_command(job):
     """Set the system's job parameters in the json file."""
     
+    # If any previous seed averages and std_devs exist delete them, 
+    # because they will need recalculated as more state points were added.
+    if os.path.isfile(f'../../analysis/{output_avg_std_of_seed_txt_filename}.txt'):
+        os.remove(f'../../analysis/{output_avg_std_of_seed_txt_filename}.txt')
+
     # Note: the sp=setpoint variables (from init.py file), doc=user documented variables
 
     # Creating a new json file with user built variables (doc)
