@@ -69,6 +69,11 @@ conda env create --file cpu_environment.yml
 conda env create --file gpu_environment.yml
 ```
 
+##### Activate conda:
+```bash
+conda activate signac_pytorch_plmnist_example
+```
+
 #### Install the plmnist package:
 ```bash
 cd install_custom_package/plmnist 

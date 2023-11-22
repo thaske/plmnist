@@ -3,6 +3,12 @@
 
 ### Overview
 All the `signac` commands are run from the `<local_path>/signac_pytorch_plmnist_example/signac_pytorch_plmnist_example/project` directory, which include, but are not limited to the following commands:
+
+ - Activate conda.
+```bash
+conda activate signac_pytorch_plmnist_example
+```
+
  - State point initialization.
 ```bash
 python init.py
