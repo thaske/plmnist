@@ -1,4 +1,4 @@
-name: cpu_signac_pytorch_pl_mnist_example
+name: cpu_signac_pytorch_plmnist_example
 channels:
   - pytorch
   - nvidia
