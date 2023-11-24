@@ -9,6 +9,6 @@ dependencies:
   - pytorch::torchvision
   - conda-forge::pytorch-lightning
   - conda-forge::matplotlib
-  - signac
-  - signac-flow
-  - signac-dashboard
+  - conda-forge::signac
+  - conda-forge::signac-flow
+  - conda-forge::signac-dashboard
