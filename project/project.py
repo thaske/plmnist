@@ -105,7 +105,7 @@ def part_3_train_and_test_completed(job: Job):
     with_job=True,
     cmd=True,
 )
-def part_3_train_and_test(job: Job):
+def part_3_train_and_test_command(job: Job):
     """Run the train + test command."""
     output_file.unlink(missing_ok=True)
 

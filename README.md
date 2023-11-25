@@ -104,19 +104,19 @@ python project.py run
 Run all available `part 1` sections of the project locally with the `run` command.
 
 ```bash
-python project.py run -o part_1_initial_parameters_command
+python project.py run -o part_1_initialize_signac_command
 ```
 
 Run all available `part 2` sections of the project locally with the `run` command.
 
 ```bash
-python project.py run -o part_2_download_the_dataset_command
+python project.py run -o part_2_download_data_command
 ```
 
 Run all available `part 3` sections of the project locally with the `run` command.
 
 ```bash
-python project.py run -o part_3_train_test_write_command
+python project.py run -o part_3_train_and_test_command
 ```
 
 Run all available `part 4` sections of the project locally with the `run` command.
@@ -128,7 +128,7 @@ python project.py run -o part_4_fgsm_attack_command
 Run all available `part 5` sections of the project locally with the `run` command.
 
 ```bash
-python project.py run -o part_5_analysis_seed_averages_command
+python project.py run -o part_5_seed_analysis_command
 ```
 
 Additionally, you can run the following flags for the  `run` command, controlling the how the jobs are executed on the local machine (does not produce HPC job submission scripts):
@@ -166,19 +166,19 @@ python project.py submit
 Submit all available `part 1` sections of the project to the HPC with the `submit` command.
 
 ```bash
-python project.py submit -o part_1_initial_parameters_command
+python project.py submit -o part_1_initialize_signac_command
 ```
 
 Submit all available `part 2` sections of the project to the HPC with the `submit` command.
 
 ```bash
-python project.py submit -o part_2_download_the_dataset_command
+python project.py submit -o part_2_download_data_command
 ```
 
 Submit all available `part 3` sections of the project to the HPC with the `submit` command.
 
 ```bash
-python project.py submit -o part_3_train_test_write_command
+python project.py submit -o part_3_train_and_test_command
 ```
 Submit all available `part 4` sections of the project to the HPC with the `submit` command.
 
@@ -189,7 +189,7 @@ python project.py submit -o part_4_fgsm_attack_command
 Submit all available `part 5` sections of the project to the HPC with the `submit` command.
 
 ```bash
-python project.py submit -o part_5_analysis_seed_averages_command
+python project.py submit -o part_5_seed_analysis_command
 ```
 
 Additionally, you can run the following flags for the `submit` command, controlling the how the jobs are submitted to the HPC:
