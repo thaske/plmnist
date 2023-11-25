@@ -1,4 +1,7 @@
 name: plmnist
+channels:
+  - pytorch
+  - conda-forge
 dependencies:
   - pytorch::pytorch
   - pytorch::torchvision
