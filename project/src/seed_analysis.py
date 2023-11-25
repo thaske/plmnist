@@ -13,7 +13,7 @@ def statepoint_without_seed(job: "Job"):
     return [(k, v) for k, v in job.statepoint.items() if k != "seed_int"]
 
 
-def write_output(aggregated_jobs, output_file):
+def seed_analysis(aggregated_jobs, output_file):
     test_acc_list = []
     test_loss_list = []
     val_acc_list = []

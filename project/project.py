@@ -5,15 +5,17 @@ from pathlib import Path
 
 import hpc_setup
 from flow import FlowProject, aggregator
+from signac import get_project
 from signac.job import Job
-from project.src.aggregate_analysis import write_output, statepoint_without_seed
+
+from src.seed_analysis import seed_analysis, statepoint_without_seed
 
 
 # setup paths
 signac_directory = Path.cwd()
 
-if signac_directory.name != "signac":
-    raise ValueError("Please run this script from inside the signac directory.")
+if signac_directory.name != "project":
+    raise ValueError(f"Please run this script from inside the project directory.")
 
 root_directory = signac_directory.parent
 
@@ -27,18 +29,18 @@ output_file = signac_directory / "analysis" / "output.txt"
 
 # post-condition: the job document has been written
 @FlowProject.label
-def part_1_initial_parameters_completed(job: Job):
+def part_1_initialize_signac_completed(job: Job):
     """Check that the job document has been written."""
     return job.isfile("signac_job_document.json")
 
 
 # operation: write the job document
-@FlowProject.post(part_1_initial_parameters_completed)
+@FlowProject.post(part_1_initialize_signac_completed)
 @FlowProject.operation(
     directives=dict(walltime=0.1, memory=4, np=1, ngpu=0),
     with_job=True,
 )
-def part_1_initial_parameters_command(job: Job):
+def part_1_initialize_signac_command(job: Job):
     """Set the system's job parameters in the json file."""
     output_file.unlink(missing_ok=True)
 
@@ -50,6 +52,10 @@ def part_1_initial_parameters_command(job: Job):
     job.document.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
     job.document.seed = job.statepoint.seed_int
 
+    # similarly, there is a project document that can also store some data.
+    project = get_project()
+    project.document.num_jobs = len(project)
+
 
 # ┌──────────────────────────────────┐
 # │ Part 2 - download the MNIST data │
@@ -58,18 +64,19 @@ def part_1_initial_parameters_command(job: Job):
 
 # post-condition: the data has been downloaded
 @FlowProject.label
-def part_2_download_the_dataset_completed(*job):
+def part_2_download_data_completed(*job):
     """Check that data has been downloaded."""
     return data_directory.exists() and (data_directory / "MNIST").exists()
 
 
 # operation: download the data
-@FlowProject.post(part_2_download_the_dataset_completed)
+@FlowProject.pre(part_1_initialize_signac_completed)
+@FlowProject.post(part_2_download_data_completed)
 @FlowProject.operation(
     directives=dict(walltime=0.2, memory=4, np=1, ngpu=0),
     cmd=True,
 )
-def part_2_download_the_dataset_command(*jobs):
+def part_2_download_data_command(*jobs):
     """Download the data."""
     data_directory.mkdir(parents=True, exist_ok=True)
 
@@ -84,20 +91,20 @@ def part_2_download_the_dataset_command(*jobs):
 
 # post-condition: the results file exists
 @FlowProject.label
-def part_3_train_test_write_completed(job: Job):
+def part_3_train_and_test_completed(job: Job):
     """Check if the results file exists."""
     return job.isfile("results.json")
 
 
 # operation: run the train + test command
-@FlowProject.pre(part_2_download_the_dataset_completed)
-@FlowProject.post(part_3_train_test_write_completed)
+@FlowProject.pre(part_2_download_data_completed)
+@FlowProject.post(part_3_train_and_test_completed)
 @FlowProject.operation(
     directives=dict(walltime=1.0, memory=4, np=1, ngpu=1),
     with_job=True,
     cmd=True,
 )
-def part_3_train_test_write_command(job: Job):
+def part_3_train_and_test(job: Job):
     """Run the train + test command."""
     output_file.unlink(missing_ok=True)
 
@@ -148,7 +155,7 @@ def part_4_fgsm_attack_completed(job: Job):
 
 
 # operation: run the fgsm attack command
-@FlowProject.pre(part_3_train_test_write_completed)
+@FlowProject.pre(part_3_train_and_test_completed)
 @FlowProject.post(part_4_fgsm_attack_completed)
 @FlowProject.operation(
     directives=dict(walltime=0.5, memory=4, np=1, ngpu=0),
@@ -175,23 +182,23 @@ def part_4_fgsm_attack_command(job: Job):
 
 # post-condition: the replicate (seed) average file has been written
 @FlowProject.label
-def part_5_analysis_seed_averages_completed(*jobs):
+def part_5_seed_analysis_completed(*jobs):
     """Check that the replicate (seed) average file has been written."""
     return output_file.exists()
 
 
 # operation: write the output file with the seed averages
 @FlowProject.pre(lambda *jobs: all(part_4_fgsm_attack_completed(j) for j in jobs))
-@FlowProject.post(part_5_analysis_seed_averages_completed)
+@FlowProject.post(part_5_seed_analysis_completed)
 @FlowProject.operation(
     directives=dict(walltime=0.6, memory=4, np=1, ngpu=0),
     aggregator=aggregator.groupby(
         key=statepoint_without_seed, sort_by="seed_int", sort_ascending=False
     ),
 )
-def part_5_analysis_seed_averages_command(*aggregated_jobs: Job):
+def part_5_seed_analysis_command(*aggregated_jobs: Job):
     """Write the output file with the seed averages."""
-    write_output(aggregated_jobs, output_file)
+    seed_analysis(aggregated_jobs, output_file)
 
 
 if __name__ == "__main__":
