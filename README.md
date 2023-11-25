@@ -1,4 +1,4 @@
-## Signac Workflow Tutorial: plmnist Example using Pytorch
+## Signac Workflow Tutorial: MNIST Example using PyTorch Lightning
 ----------------------------------------------------------
 
 ### General Notes
@@ -47,7 +47,7 @@ Please cite this GitHub repository and the repository in which the work was base
 
 ### Authors
 
-- Brad Crawford and Michael Klamkin. Signac Workflow Tutorial: plmnist Example using Pytorch. GitHub, 2023 
+- Brad Crawford and Michael Klamkin. Signac Workflow Tutorial: MNIST Example using PyTorch Lightning. GitHub, 2023 
 
 ### Installation
 
