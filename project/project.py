@@ -69,11 +69,12 @@ def part_2_download_data_completed(*job):
 
 
 # operation: download the data
-@FlowProject.pre(part_1_initialize_signac_completed)
+@FlowProject.pre(lambda *jobs: all(part_1_initialize_signac_completed(j) for j in jobs))
 @FlowProject.post(part_2_download_data_completed)
 @FlowProject.operation(
     directives=dict(walltime=0.2, memory=4, np=1, ngpu=0),
     cmd=True,
+    aggregator=aggregator(),
 )
 def part_2_download_data_command(*jobs):
     """Download the data."""
