@@ -31,8 +31,6 @@ This is a `signac` Workflow example/tutorial for a pytorch using plmnist, which 
 - **Part 5:** Obtain the average and standard deviation for each input value combination (`num_epochs`, `batch_size`, `hidden_size`, `learning_rate`, `dropout_prob`, `fgsm_epsilon`), with different `seed` values (replicates). The user can add more values at any time via the `init.py` file and rerun only the added value calculations.  The averages and standard deviations accoss the different `seed` values (replicates) are determined for the `test_acc_avg`, `test_acc_std`, `test_loss_avg`, `test_loss_std`, `val_acc_avg`, `val_acc_std`, `val_loss_avg`, `val_loss_std`, `fgsm_acc_avg`, and `fgsm_acc_std` values, and added to the `analysis/output_avg_std_of_seed_txt_filename.txt` file.
 
 #### Notes:
-- **install_custom_package directory:** This directory is used to house the main `plmnist` package which is added to the conda package in the install instuctions. 
-
 - **src directory:** This directory can be used to store any other custom function that are required for this workflow.  This includes any developed `Python` functions or any template files used for the custom workflow (Example: A base template file that is used for a find and replace function, changing the variables with the differing state point inputs).  
 
 - **templates directory:** This directory is used to store the custom HPC submission scripts and any template files used for the custom workflow (Example: A base template file that is used for a find and replace function, changing the variables with the differing state point inputs).  These find and replace template files could also be put in the `src` directory, but the HPC submission scripts must remain in the `templates` directory.  **All the standard or custom module load commands, conda activate commands, and any other custom items that needed to be HPC submission scripts should in included here for every project (Example: Specific queues, CPU/GPU models, etc.).** 
@@ -70,20 +68,11 @@ conda env create --file gpu_environment.yml
 ```
 
 ##### Activate the conda environment:
- - For CPU-only installation: 
 ```bash
-conda activate cpu_signac_pytorch_plmnist_example
-```
-
- - For GPU installation: 
-```bash
-conda activate gpu_signac_pytorch_plmnist_example
+conda activate plmnist
 ```
 
 #### Install the plmnist package:
-```bash
-cd install_custom_package/plmnist 
-```
 
 ```bash
 pip install -e .
