@@ -22,9 +22,10 @@ root_directory = signac_directory.parent
 data_directory = root_directory / "data"
 output_file = signac_directory / "analysis" / "output.txt"
 
-# ┌──────────────────────────────────┐
-# │ Part 1 - write the job document. │
-# └──────────────────────────────────┘
+
+# ┌─────────────────────────────────┐
+# │ Part 1 - write the job document │
+# └─────────────────────────────────┘
 
 
 # post-condition: the job document has been written

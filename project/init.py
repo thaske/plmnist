@@ -1,15 +1,17 @@
 """Initialize signac statepoints."""
 
 import signac
-from pathlib import Path
 
-# *******************************************
-# ENTER THE MAIN USER STATEPOINTS (START)
-# *******************************************
-# Initialize the signac project
-signac.init_project()
 
-num_epochs_int_list = [5, 10]
+project = signac.init_project()
+
+
+# ┌───────────────────────────┐
+# │ Define statepoints to run │
+# └───────────────────────────┘
+
+
+num_epochs_int_list = [1, 5]
 batch_size_int_list = [128]
 hidden_size_int_list = [64]
 learning_rate_float_list = [2e-4]
@@ -18,19 +20,12 @@ fgsm_epsilon_float_list = [0.05]
 seed_int_list = [1, 2, 3]
 
 
-# *******************************************
-# ENTER THE MAIN USER STATEPOINTS (END)
-# *******************************************
-
-# Setup the directories in the current directory
-pr_root = Path().absolute()
-pr = signac.get_project(pr_root)
+# ┌────────────────────────────────────────┐
+# │ Create list of statepoint dictionaries │
+# └────────────────────────────────────────┘
 
 
-# Set all the statepoints, which will be used to create separate folders
-# for each combination of state points.
-all_statepoints = list()
-
+all_statepoints = []
 for num_epochs_int_i in num_epochs_int_list:
     for batch_size_int_i in batch_size_int_list:
         for hidden_size_int_i in hidden_size_int_list:
@@ -50,6 +45,11 @@ for num_epochs_int_i in num_epochs_int_list:
 
                             all_statepoints.append(statepoint)
 
-# Initiate all statepoint createing the jobs/folders.
+
+# ┌────────────────────────┐
+# │ Initialize statepoints │
+# └────────────────────────┘
+
+
 for sp in all_statepoints:
-    pr.open_job(statepoint=sp).init()
+    project.open_job(statepoint=sp).init()
