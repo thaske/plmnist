@@ -15,11 +15,9 @@ from src.seed_analysis import seed_analysis, statepoint_without_seed
 signac_directory = Path.cwd()
 
 if signac_directory.name != "project":
-    raise ValueError(f"Please run this script from inside the project directory.")
+    raise ValueError(f"Please run this script from inside the `project` directory.")
 
-root_directory = signac_directory.parent
-
-data_directory = root_directory / "data"
+data_directory = signac_directory.parent / "data"
 output_file = signac_directory / "analysis" / "output.txt"
 
 

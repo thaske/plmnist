@@ -1,7 +1,13 @@
 """Initialize signac statepoints."""
+from pathlib import Path
 
 import signac
 
+
+signac_directory = Path.cwd()
+
+if signac_directory.name != "project":
+    raise ValueError(f"Please run this script from inside the `project` directory.")
 
 project = signac.init_project()
 
