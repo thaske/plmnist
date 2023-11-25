@@ -8,7 +8,7 @@ class Phoenix(DefaultSlurmEnvironment):
 
     # Find the hostname by loggin in the HPC and using the 'hostname' command.
     # In this case 'hostname' produced 'login-phoenix-slurm-2.pace.gatech.edu'.
-    hostname_pattern = r"login-phoenix-slurm-.\.pace\.gatech\.edu"
+    hostname_pattern = r".+\.pace\.gatech\.edu$"
     template = "phoenix.sh"
 
     # NOTE: we never actually import this class ourselves - Signac looks at all
