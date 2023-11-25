@@ -3,8 +3,8 @@ import os, json, hashlib
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import CSVLogger
 
-from model import LitMNIST
-from config import (
+from plmnist.model import LitMNIST
+from plmnist.config import (
     DATA_PATH,
     LOG_PATH,
     RESULT_PATH,
