@@ -1,7 +1,6 @@
 """Signac implementation for the plmnist project."""
 
 import json, datetime
-import numpy as np
 from pathlib import Path
 
 import hpc_setup
