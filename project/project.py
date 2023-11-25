@@ -182,9 +182,18 @@ def part_4_fgsm_attack_command(job: Job):
 
 # post-condition: the replicate (seed) average file has been written
 @FlowProject.label
-def part_5_seed_analysis_completed(*jobs):
+def part_5_seed_analysis_completed(*job):
     """Check that the replicate (seed) average file has been written."""
-    return output_file.exists()
+    if not output_file.exists():
+        return False
+
+    with open(output_file, "r") as f:
+        lines = f.readlines()
+
+    if len(lines) != len(job) + 1:
+        return False
+    
+    return True
 
 
 # operation: write the output file with the seed averages
