@@ -63,7 +63,7 @@ def part_1_initialize_signac_command(job: Job):
 
 # post-condition: the data has been downloaded
 @FlowProject.label
-def part_2_download_data_completed(*job):
+def part_2_download_data_completed(*jobs: Job):
     """Check that data has been downloaded."""
     return data_directory.exists() and (data_directory / "MNIST").exists()
 
@@ -76,7 +76,7 @@ def part_2_download_data_completed(*job):
     cmd=True,
     aggregator=aggregator(),
 )
-def part_2_download_data_command(*jobs):
+def part_2_download_data_command(*jobs: Job):
     """Download the data."""
     data_directory.mkdir(parents=True, exist_ok=True)
 
@@ -182,7 +182,7 @@ def part_4_fgsm_attack_command(job: Job):
 
 # post-condition: the replicate (seed) average file has been written
 @FlowProject.label
-def part_5_seed_analysis_completed(*job):
+def part_5_seed_analysis_completed(*jobs: Job):
     """Check that the replicate (seed) average file has been written."""
     if not output_file.exists():
         return False
@@ -190,9 +190,12 @@ def part_5_seed_analysis_completed(*job):
     with open(output_file, "r") as f:
         lines = f.readlines()
 
-    if len(lines) != len(job) + 1:
+    project = get_project()
+    num_agg = len(project) / len(jobs)
+
+    if len(lines) != num_agg + 1:
         return False
-    
+
     return True
 
 
