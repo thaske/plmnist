@@ -51,10 +51,6 @@ def part_1_initialize_signac_command(job: Job):
     job.document.start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
     job.document.seed = job.statepoint.seed_int
 
-    # similarly, there is a project document that can also store some data.
-    project = get_project()
-    project.document.num_jobs = len(project)
-
 
 # ┌──────────────────────────────────┐
 # │ Part 2 - download the MNIST data │
