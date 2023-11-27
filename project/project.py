@@ -191,7 +191,12 @@ def part_5_seed_analysis_completed(*jobs: Job):
         lines = f.readlines()
 
     project = get_project()
-    num_agg = len(project) / len(jobs)
+
+    num_seeds = set()
+    for job in project:
+        num_seeds.add(job.statepoint.seed_int)
+
+    num_agg = len(project) / len(num_seeds)
 
     if len(lines) != num_agg + 1:
         return False
