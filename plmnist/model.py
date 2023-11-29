@@ -10,13 +10,12 @@ from torchmetrics import Accuracy
 from torchvision import transforms
 from torchvision.datasets import MNIST
 
-from config import (
+from plmnist.config import (
     DATA_PATH,
     BATCH_SIZE,
     HIDDEN_SIZE,
     LEARNING_RATE,
     DROPOUT_PROB,
-    FGSM_EPSILON
 )
 
 warnings.filterwarnings("ignore", message="The.*does not have many workers")

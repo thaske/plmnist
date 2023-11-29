@@ -33,7 +33,7 @@ module load cuda/12.1.1-6oacj6
 {%- endif %}
 
 # activate the required conda environment
-conda activate signac_numpy_example
+conda activate plmnist
 
 {% endblock header %}
 

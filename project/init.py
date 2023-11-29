@@ -1,50 +1,37 @@
 """Initialize signac statepoints."""
+from pathlib import Path
 
-import os
 import signac
 
-# *******************************************
-# ENTER THE MAIN USER STATEPOINTS (START)
-# *******************************************
-# Initialize the signac project
-signac.init_project()
 
-# Tested NUM_EPOCHS list [From: NUM_EPOCHS = int(os.environ.get("PLM_NUM_EPOCHS", 3))]
-num_epochs_int_list = [3, 6]
+signac_directory = Path.cwd()
 
-# Tested BATCH_SIZE list [From: int(os.environ.get("PLM_BATCH_SIZE", 256))]
-batch_size_int_list = [256, 512]
+if signac_directory.name != "project":
+    raise ValueError(f"Please run this script from inside the `project` directory.")
 
-# Tested HIDDEN_SIZE list [From: int(os.environ.get("PLM_HIDDEN_SIZE", 64))]
+project = signac.init_project()
+
+
+# ┌───────────────────────────┐
+# │ Define statepoints to run │
+# └───────────────────────────┘
+
+
+num_epochs_int_list = [1, 5]
+batch_size_int_list = [128]
 hidden_size_int_list = [64]
-
-# Tested LEARNING_RATE list [From: float(os.environ.get("PLM_LEARNING_RATE", 2e-4))]
 learning_rate_float_list = [2e-4]
-
-# Tested DROPOUT_PROB list [From: float(os.environ.get("PLM_DROPOUT_PROB", 0.1))]
-dropout_prob_float_list = [0.1]
-
-# Tested FGSM_EPSILON list [From: float(os.environ.get("PLM_FGSM_EPSILON", 0.05))]
+dropout_prob_float_list = [0.0, 0.1, 0.5]
 fgsm_epsilon_float_list = [0.05]
-
-# Tested SEED list [From: int(os.environ.get("PLM_SEED", 42))]
-seed_int_list = [1, 2]
+seed_int_list = [1, 2, 3]
 
 
-# *******************************************
-# ENTER THE MAIN USER STATEPOINTS (END)
-# *******************************************
-
-# Setup the directories in the current directory
-print("os.getcwd() = " +str(os.getcwd()))
-pr_root = os.getcwd()
-pr = signac.get_project(pr_root)
+# ┌────────────────────────────────────────┐
+# │ Create list of statepoint dictionaries │
+# └────────────────────────────────────────┘
 
 
-# Set all the statepoints, which will be used to create separate folders 
-# for each combination of state points.
-all_statepoints = list()
-
+all_statepoints = []
 for num_epochs_int_i in num_epochs_int_list:
     for batch_size_int_i in batch_size_int_list:
         for hidden_size_int_i in hidden_size_int_list:
@@ -64,8 +51,11 @@ for num_epochs_int_i in num_epochs_int_list:
 
                             all_statepoints.append(statepoint)
 
-# Initiate all statepoint createing the jobs/folders.
+
+# ┌────────────────────────┐
+# │ Initialize statepoints │
+# └────────────────────────┘
+
+
 for sp in all_statepoints:
-    pr.open_job(
-        statepoint=sp,
-    ).init()
+    project.open_job(statepoint=sp).init()

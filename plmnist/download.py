@@ -1,7 +1,7 @@
 import argparse
 
-from model import LitMNIST
-from config import DATA_PATH
+from plmnist.model import LitMNIST
+from plmnist.config import DATA_PATH
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
