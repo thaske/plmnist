@@ -1,8 +1,11 @@
 name: plmnist
 channels:
   - pytorch
+  - nvidia
   - conda-forge
 dependencies:
+  - python=3.11
+  - numpy=1.24.0
   - pytorch::pytorch
   - pytorch::torchvision
   - conda-forge::pytorch-lightning
