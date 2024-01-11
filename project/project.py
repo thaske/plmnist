@@ -93,6 +93,7 @@ def part_3_train_and_test_completed(job: Job):
 
 
 # operation: run the train + test command
+@FlowProject.pre(part_1_initialize_signac_completed)
 @FlowProject.pre(part_2_download_data_completed)
 @FlowProject.post(part_3_train_and_test_completed)
 @FlowProject.operation(
