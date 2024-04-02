@@ -34,7 +34,7 @@ echo  "Time is" date
 module load anaconda3
 
 # Add any modules here needed only for the GPU versions
-{% if gpus %}
+{% if gpus_per_task %}
 module load cuda/12.1.1-6oacj6
 {%- endif %}
 
