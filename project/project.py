@@ -13,7 +13,7 @@ from src.seed_analysis import seed_analysis, statepoint_without_seed
 # *******************************************************
 # *******************  WARNING  ************************* 
 # The "np" or "ntasks" (i.e., number or tasks) in the 
-# "@FlowProject.operation(directives= dict(
+# "@FlowProject.operation(directives= dict( 
 # walltime=0.5, 
 # mem_per_cpu=4, 
 # np=1, 
