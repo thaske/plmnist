@@ -8,7 +8,7 @@
 
     {{- super () -}}
 
-{% if gpus %}
+{% if gpus_per_task %}
 #SBATCH -p gpu-a100
 #SBATCH --gpus-per-task={{ gpus_per_task }}
 
