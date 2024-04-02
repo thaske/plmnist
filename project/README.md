@@ -6,6 +6,12 @@ All the `signac` commands are run from the `<local_path>/signac_pytorch_plmnist_
 
 
 ##### Run or submit signac jobs:
+This can be done at the start of a new project, but is not always required. If you moved the directory after starting a project or signac can not find the path correctly, you will need to run the following command (`signac init`) from the `project` directory:
+
+```bash
+signac init
+```
+
  - State point initialization.
 ```bash
 python init.py
