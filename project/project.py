@@ -18,7 +18,7 @@ from src.seed_analysis import seed_analysis, statepoint_without_seed
 # mem-per-cpu=4, 
 # np=1, 
 # cpus-per-task=1,
-# ngpu=0
+# gpus-per-task=0
 # )" 
 # should be 1 for most cases.
 # Setting to a higher value will multiply
@@ -56,7 +56,7 @@ def part_1_initialize_signac_completed(job: Job):
     {
         "np": 1,
         "cpus-per-task": 1,
-        "ngpu": 0,
+        "gpus-per-task": 0,
         "mem-per-cpu": 4,
         "walltime": 0.1,
     },
@@ -95,7 +95,7 @@ def part_2_download_data_completed(*jobs: Job):
     {
         "np": 1,
         "cpus-per-task": 1,
-        "ngpu": 0,
+        "gpus-per-task": 0,
         "mem-per-cpu": 4,
         "walltime": 0.2,
     },
@@ -130,7 +130,7 @@ def part_3_train_and_test_completed(job: Job):
     {
         "np": 1,
         "cpus-per-task": 1,
-        "ngpu": 1,
+        "gpus-per-task": 1,
         "mem-per-cpu": 4,
         "walltime": 1.0,
     },
@@ -195,7 +195,7 @@ def part_4_fgsm_attack_completed(job: Job):
     {
         "np": 1,
         "cpus-per-task": 1,
-        "ngpu": 0,
+        "gpus-per-task": 0,
         "mem-per-cpu": 4,
         "walltime": 0.5,
     },
@@ -252,7 +252,7 @@ def part_5_seed_analysis_completed(*jobs: Job):
     {
         "np": 1,
         "cpus-per-task": 1,
-        "ngpu": 0,
+        "gpus-per-task": 0,
         "mem-per-cpu": 4,
         "walltime": 0.6,
     },

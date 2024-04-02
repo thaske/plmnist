@@ -4,12 +4,13 @@
 {% set gpus = operations|map(attribute='directives.ngpu')|max %}
 {% set mem_per_cpu = operations|map(attribute='directives.mem-per-cpu')|max  %}
 {% set cpus_per_task = operations|map(attribute='directives.cpus-per-task')|max  %}
+{% set gpus_per_task = operations|map(attribute='directives.gpus-per-task')|max  %}
 
     {{- super () -}}
 
 {% if gpus %}
 #SBATCH -p gpu-a100
-#SBATCH --gres gpu:{{ gpus }}
+#SBATCH --gpus-per-task={{ gpus_per_task }}
 
 {%- else %}
 #SBATCH -p cpu-small
