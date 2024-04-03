@@ -20,6 +20,7 @@
 
 #SBATCH -A phx-pace-staff
 #SBATCH -N 1
+#SBATCH --ntasks-per-node={{ np_global }}
 #SBATCH --cpus-per-task={{ cpus_per_task }}
 #SBATCH -q inferno
 #SBATCH --output=/dev/null
