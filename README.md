@@ -82,6 +82,12 @@ pip install -e .
 
 All commands in this section are run from the `<local_path>/signac_pytorch_plmnist_example/signac_pytorch_plmnist_example/project` directory.
 
+This can be done at the start of a new project, but is not always required. If you moved the directory after starting a project or signac can not find the path correctly, you will need to run the following command (`signac init`) from the `project` directory:
+
+```bash
+signac init
+```
+
 Initialize all the state points for the jobs (generate all the separate folders with the same variables).  
  - Note: This command generates the `workspace` folder, which includes a sub-folder for each state point (different variable combinations),  These sub-folders are numbered uniquely based of the state point values.  The user can add more state points via the `init.py` file at any time, running the below command to create the new state points files and sub-folders that are in the `init.py` file.
 
@@ -132,7 +138,7 @@ python project.py run -o part_5_seed_analysis_command
 ```
 
 Additionally, you can run the following flags for the  `run` command, controlling the how the jobs are executed on the local machine (does not produce HPC job submission scripts):
- - `--parallel 2` : This only works this way when using `run`. This runs several jobs in parallel (2 in this case) at a time on the local machine, auto adjusting the time, CPU cores, etc., based on the total command selections.
+- `--parallel 2` : This only works this way when using `run`. This runs several jobs in parallel (2 in this case) at a time on the local machine.
  - See the `signac` [documenation](https://docs.signac.io/en/latest/) for more information, features, and the [Project Command Line Interface](https://docs.signac.io/projects/flow/en/latest/project-cli.html).
 
 
@@ -143,6 +149,12 @@ All commands in this section are run from the `<local_path>/signac_pytorch_plmni
 First, you need to be sure that the `templates/phoenix.sh` or the used HPC template file is correct for the given HPC.  Additionally, the `templates/phoenix.sh` file is correct for the given HPC in the `project.py` file, specifically it is setup for  the `DefaultSlurmEnvironment` (only for a Slurm enviroment), and the class for it is set properly (Example: `class Phoenix(DefaultSlurmEnvironment):`).  
 
 Second, in general, the `signac labels` (Example: `@Project.label` in the `project.py` file) that check the status of each workflow part should not be written in a way that is computationally expensive, removing the need to run an interactive job on the HPC when using the `signac status` command.  Otherwise, you need to run an interactive job when using the `signac status` command on the HPC, as it will be computationally expensive. 
+
+This can be done at the start of a new project, but is not always required. If you moved the directory after starting a project or signac can not find the path correctly, you will need to run the following command (`signac init`) from the `project` directory:
+
+```bash
+signac init
+```
 
 Initialize all the state points for the jobs (generate all the separate folders with the different state points).  
  - Note: This command generates the `workspace` folder, which includes a sub-folder for each state point (different variable combinations),  These sub-folders are numbered uniquely based of the state point values.  The user can add more state points via the `init.py` file at any time, running the below command to create the new state points files and sub-folders that are in the `init.py` file.
@@ -195,5 +207,7 @@ python project.py submit -o part_5_seed_analysis_command
 Additionally, you can run the following flags for the `submit` command, controlling the how the jobs are submitted to the HPC:
  - `--bundle 2` : Only available when using `submit`.  This bundles multiple jobs (2 in this case) into a single run or HPC submittion script, auto adjusting the time, CPU cores, etc., based on the total command selections.
   - `--pretend` : Only available when using `submit`.  This is used to output what the submission script will look like, without submitting it to the HPC. 
-  - `--parallel` : This only works this way when using `submit`.  The `N` value in `--parallel N` is not readl; therefore, it only runs all the jobs in a HPC submittion script at the same time (in parallel), auto adjusting the time, CPU cores, etc., based on the total command selections. 
+  - `--parallel` : This only works this way when using `submit`.  The `N` value in `--parallel N` is not read; therefore, it only runs all the jobs in a HPC submittion script at the same time (in parallel), auto adjusting some variables.
   - See the `signac` [documenation](https://docs.signac.io/en/latest/) for more information, features, and the [Project Command Line Interface](https://docs.signac.io/projects/flow/en/latest/project-cli.html).
+  
+  `Warning`, the user should always confirm the job submission to the HPC is working properly before submitting jobs using the `--pretend` flag, especially when using `--parallel` and `--bundle`.  This may involve programming the correct items in the custom HPC submission script (i.e., the files in the `templates` folder) as needed to make it work for their unique setup. 

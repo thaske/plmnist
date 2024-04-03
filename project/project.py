@@ -10,6 +10,22 @@ from signac.job import Job
 
 from src.seed_analysis import seed_analysis, statepoint_without_seed
 
+# *******************************************************
+# *******************  WARNING  ************************* 
+# The "np" or "ntasks" (i.e., number or tasks) in the 
+# "@FlowProject.operation(directives= dict( 
+# walltime=0.5, 
+# mem-per-cpu=4, 
+# np=1, 
+# cpus-per-task=1,
+# gpus-per-task=0
+# )" 
+# should be 1 for most cases.
+# Setting to a higher value will multiply
+# the CPUs, GPUs, and other parameters by its value 
+# that many cause more resources to be used than expected,
+# which may result in higher HPC or cloud computing costs!
+# *******************************************************
 
 # setup paths
 signac_directory = Path.cwd()
@@ -36,7 +52,14 @@ def part_1_initialize_signac_completed(job: Job):
 # operation: write the job document
 @FlowProject.post(part_1_initialize_signac_completed)
 @FlowProject.operation(
-    directives=dict(walltime=0.1, memory=4, np=1, ngpu=0),
+    directives=
+    {
+        "np": 1,
+        "cpus-per-task": 1,
+        "gpus-per-task": 0,
+        "mem-per-cpu": 4,
+        "walltime": 0.1,
+    },
     with_job=True,
 )
 def part_1_initialize_signac_command(job: Job):
@@ -68,7 +91,14 @@ def part_2_download_data_completed(*jobs: Job):
 @FlowProject.pre(lambda *jobs: all(part_1_initialize_signac_completed(j) for j in jobs))
 @FlowProject.post(part_2_download_data_completed)
 @FlowProject.operation(
-    directives=dict(walltime=0.2, memory=4, np=1, ngpu=0),
+    directives=
+    {
+        "np": 1,
+        "cpus-per-task": 1,
+        "gpus-per-task": 0,
+        "mem-per-cpu": 4,
+        "walltime": 0.2,
+    },
     cmd=True,
     aggregator=aggregator(),
 )
@@ -97,7 +127,14 @@ def part_3_train_and_test_completed(job: Job):
 @FlowProject.pre(part_2_download_data_completed)
 @FlowProject.post(part_3_train_and_test_completed)
 @FlowProject.operation(
-    directives=dict(walltime=1.0, memory=4, np=1, ngpu=1),
+    directives=
+    {
+        "np": 1,
+        "cpus-per-task": 1,
+        "gpus-per-task": 1,
+        "mem-per-cpu": 4,
+        "walltime": 1.0,
+    },
     with_job=True,
     cmd=True,
 )
@@ -155,7 +192,14 @@ def part_4_fgsm_attack_completed(job: Job):
 @FlowProject.pre(part_3_train_and_test_completed)
 @FlowProject.post(part_4_fgsm_attack_completed)
 @FlowProject.operation(
-    directives=dict(walltime=0.5, memory=4, np=1, ngpu=0),
+    directives=
+    {
+        "np": 1,
+        "cpus-per-task": 1,
+        "gpus-per-task": 0,
+        "mem-per-cpu": 4,
+        "walltime": 0.5,
+    },
     with_job=True,
     cmd=True,
 )
@@ -205,7 +249,14 @@ def part_5_seed_analysis_completed(*jobs: Job):
 @FlowProject.pre(lambda *jobs: all(part_4_fgsm_attack_completed(j) for j in jobs))
 @FlowProject.post(part_5_seed_analysis_completed)
 @FlowProject.operation(
-    directives=dict(walltime=0.6, memory=4, np=1, ngpu=0),
+    directives=
+    {
+        "np": 1,
+        "cpus-per-task": 1,
+        "gpus-per-task": 0,
+        "mem-per-cpu": 4,
+        "walltime": 0.6,
+    },
     aggregator=aggregator.groupby(
         key=statepoint_without_seed, sort_by="seed_int", sort_ascending=False
     ),

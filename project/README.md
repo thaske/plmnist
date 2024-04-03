@@ -6,6 +6,12 @@ All the `signac` commands are run from the `<local_path>/signac_pytorch_plmnist_
 
 
 ##### Run or submit signac jobs:
+This can be done at the start of a new project, but is not always required. If you moved the directory after starting a project or signac can not find the path correctly, you will need to run the following command (`signac init`) from the `project` directory:
+
+```bash
+signac init
+```
+
  - State point initialization.
 ```bash
 python init.py
@@ -25,14 +31,16 @@ python project.py submit -o <part_x_this_does_a_function_y>
 ```
 
 When using the `run` command, you can run the following flags, controlling the how the jobs are executed on the local machine (does not produce HPC job submission scripts):
- - `--parallel 2` : This only works this way when using `run`. This runs several jobs in parallel (2 in this case) at a time on the local machine, auto adjusting the time, CPU cores, etc., based on the total command selections.
+ - `--parallel 2` : This only works this way when using `run`. This runs several jobs in parallel (2 in this case) at a time on the local machine.
  - See the `signac` [documenation](https://docs.signac.io/en/latest/) for more information, features, and the [Project Command Line Interface](https://docs.signac.io/projects/flow/en/latest/project-cli.html).
 
 When using the `submit` command, you can run the following flags, controlling the how the jobs are submitted to the HPC:
  - `--bundle 2` : Only available when using `submit`.  This bundles multiple jobs (2 in this case) into a single run or HPC submittion script, auto adjusting the time, CPU cores, etc., based on the total command selections.
   - `--pretend` : Only available when using `submit`.  This is used to output what the submission script will look like, without submitting it to the HPC. 
-  - `--parallel` : This only works this way when using `submit`.  The `N` value in `--parallel N` is not readl; therefore, it only runs all the jobs in a HPC submittion script at the same time (in parallel), auto adjusting the time, CPU cores, etc., based on the total command selections. 
+  - `--parallel` : This only works this way when using `submit`.  The `N` value in `--parallel N` is not read; therefore, it only runs all the jobs in a HPC submittion script at the same time (in parallel), auto adjusting the time, CPU cores, etc., based on the total command selections. 
   - See the `signac` [documenation](https://docs.signac.io/en/latest/) for more information, features, and the [Project Command Line Interface](https://docs.signac.io/projects/flow/en/latest/project-cli.html).
+
+  `Warning`, the user should always confirm the job submission to the HPC is working properly before submitting jobs using the `--pretend` flag, especially when using `--parallel` and `--bundle`.  This may involve programming the correct items in the custom HPC submission script (i.e., the files in the `templates` folder) as needed to make it work for their unique setup. 
 
 
  ## templates directory and hpc_setup.py file
