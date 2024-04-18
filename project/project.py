@@ -10,8 +10,10 @@ from signac.job import Job
 
 from src.seed_analysis import seed_analysis, statepoint_without_seed
 
+# Set the walltime, memory, and number of CPUs and GPUs needed
+# for each individual job, based on the part/section.
 # *******************************************************
-# *******************  WARNING  ************************* 
+# *******************   Notes   ************************* 
 # The "np" or "ntasks" (i.e., number or tasks) in the 
 # "@FlowProject.operation(directives= dict( 
 # walltime=0.5, 
@@ -21,10 +23,17 @@ from src.seed_analysis import seed_analysis, statepoint_without_seed
 # gpus-per-task=0
 # )" 
 # should be 1 for most cases.
-# Setting to a higher value will multiply
+# *******************************************************
+# *******************   WARNING   ***********************
+# It is recommended to check all HPC submisstions with the
+# '--pretend' command so you do not make an errors requesting 
 # the CPUs, GPUs, and other parameters by its value 
 # that many cause more resources to be used than expected,
-# which may result in higher HPC or cloud computing costs!
+# which may result in higher HPC or cloud computing costs! 
+# *******************   WARNING   ***********************
+# *******************************************************
+# *******************   Notes   ************************* 
+# *******************************************************
 # *******************************************************
 
 # setup paths
