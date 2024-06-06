@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     pl.seed_everything(args.seed)
 
-    trainer, model = train(
+    trainer = train(
         max_epochs=args.num_epochs,
         log_path=args.log_path,
         data_dir=args.data_dir,
