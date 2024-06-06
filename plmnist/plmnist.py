@@ -1,8 +1,9 @@
-import os, json, hashlib
+import os, json, hashlib, inspect
 
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import CSVLogger
 
+from plmnist import logger
 from plmnist.model import LitMNIST
 from plmnist.config import (
     DATA_PATH,
@@ -88,6 +89,8 @@ def test(trainer: pl.Trainer, seed=None):
     results["test_loss"] = trainer.callback_metrics["test_loss"].item()
     results["test_acc"] = trainer.callback_metrics["test_acc"].item()
 
+    results["training_iteration"] = trainer.current_epoch
+
     return results
 
 
@@ -113,3 +116,25 @@ def write(
     trainer.save_checkpoint(f"{directory}/model{dhash}.ckpt")
 
     return dhash
+
+
+
+def verify_config(config: dict):
+    signature = inspect.signature(train)
+    for key in config:
+        assert key in signature.parameters, f"Unknown parameter found: {key}"
+        if not isinstance(config[key], signature.parameters[key].annotation):
+            logger.warn(
+                f"Parameter {key} has wrong type: {type(config[key])}, "
+                f"expected {signature.parameters[key].annotation}! "
+                 "This may cause errors downstream."
+            )
+
+    for key in signature.parameters:
+        if key not in config:
+            logger.info(
+                f"Parameter {key} not found in config, "
+                f"using default value: {signature.parameters[key].default}"
+            )
+            config[key] = signature.parameters[key].default
+    return config
