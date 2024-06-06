@@ -59,12 +59,12 @@ cd signac_pytorch_plmnist_example
 ```
 ##### For CPU only installations:
 ```bash
-conda env create --file cpu_environment.yml
+conda env create --file environment.yml
 ```
 
 ##### For GPU installations:
 ```bash
-conda env create --file gpu_environment.yml
+conda env create --file cuda_environment.yml
 ```
 
 ##### Activate the conda environment:

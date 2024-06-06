@@ -13,3 +13,5 @@ dependencies:
   - conda-forge::signac
   - conda-forge::signac-flow
   - conda-forge::signac-dashboard
+  - conda-forge::ray-tune
+  - conda-forge::hyperopt
