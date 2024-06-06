@@ -16,7 +16,7 @@ from plmnist.config import (
 )
 
 
-def train(
+def build_model(
     max_epochs: int = NUM_EPOCHS,
     log_path: str = LOG_PATH,
     data_dir: str = DATA_PATH,
@@ -38,10 +38,34 @@ def train(
         max_epochs=max_epochs,
         logger=CSVLogger(save_dir=log_path),
     )
-    trainer.fit(model)
-
     return trainer, model
 
+def run_training(trainer: pl.Trainer, model: pl.LightningModule):
+    trainer.fit(model)
+    return trainer
+
+def train(
+    max_epochs: int = NUM_EPOCHS,
+    log_path: str = LOG_PATH,
+    data_dir: str = DATA_PATH,
+    batch_size: int = BATCH_SIZE,
+    hidden_size: int = HIDDEN_SIZE,
+    learning_rate: float = LEARNING_RATE,
+    dropout_prob: float = DROPOUT_PROB,
+):
+    trainer, model = build_model(
+        max_epochs=max_epochs,
+        log_path=log_path,
+        data_dir=data_dir,
+        batch_size=batch_size,
+        hidden_size=hidden_size,
+        learning_rate=learning_rate,
+        dropout_prob=dropout_prob,
+    )
+
+    trainer = run_training(trainer, model)
+
+    return trainer
 
 def test(trainer: pl.Trainer, seed=None):
     results = dict()
