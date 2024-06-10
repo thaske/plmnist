@@ -30,7 +30,6 @@ parameter_space = dict(
     data_dir=DATA_PATH,
     batch_size=BATCH_SIZE,
     hidden_size=tune.qlograndint(16, 64, 16),
-    # learning_rate=tune.choice([1e-8, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1]),
     learning_rate=tune.qloguniform(1e-8, 1e-1, 1e-8),
     dropout_prob=tune.quniform(0.0, 0.7, 0.1),
     seed=SEED,
@@ -76,7 +75,9 @@ class MNISTTrainable(tune.Trainable):
         # create the model and the pytorch lightning trainer
         self.seed = config["seed"]
         self.config = config
-        self.trainer, self.model = build_model(max_epochs=STEP_EPOCHS, verbose=False, **self.config)
+        self.trainer, self.model = build_model(
+            max_epochs=STEP_EPOCHS, verbose=False, **self.config
+        )
         self.resume_ckpt_path = None
 
     def step(self):
@@ -90,7 +91,9 @@ class MNISTTrainable(tune.Trainable):
         self.resume_ckpt_path = None
 
         # test the model and return the results
-        results = test(self.trainer, self.seed, verbose=False)  # results will be reported in a table
+        results = test(
+            self.trainer, self.seed, verbose=False
+        )  # results will be reported in a table
         return results
 
     def reset_config(self, new_config):
@@ -164,24 +167,28 @@ if __name__ == "__main__":
                 metric=metric,
                 search_alg=HyperOptSearch(
                     # HyperOpt is a TPE-based search algorithm
-                    points_to_evaluate=[default_config], # start with the default config(s)
-                    n_initial_points=5 # and add a few more random points before running the optimization
+                    points_to_evaluate=[
+                        default_config
+                    ],  # start with the default config(s)
+                    n_initial_points=5,  # and add a few more random points before running the optimization
                 ),
                 scheduler=AsyncHyperBandScheduler(
                     # AsyncHyperBand will automatically stop poorly performing trials
                     time_attr="training_iteration",
                     max_t=MAX_STEPS,
-                    grace_period=1, # minimum number of steps to train for before stopping a trial
+                    grace_period=1,  # minimum number of steps to train for before stopping a trial
                 ),
                 num_samples=NUM_SAMPLES,
-                reuse_actors=True, # this saves some overhead but requires defining reset_config()
+                reuse_actors=True,  # this saves some overhead but requires defining reset_config()
                 time_budget_s=MAX_HOURS * 3600,
             ),
             run_config=air.RunConfig(
                 # the RunConfig class is where experiment options are given.
                 name=name,
-                storage_path=(Path(LOG_PATH) / "ray_results").resolve(), # if not specified, ray will store results in ~/ray_results
-                stop=dict(training_iteration=MAX_STEPS), # stop after MAX_STEPS steps
+                storage_path=(
+                    Path(LOG_PATH) / "ray_results"
+                ).resolve(),  # if not specified, ray will store results in ~/ray_results
+                stop=dict(training_iteration=MAX_STEPS),  # stop after MAX_STEPS steps
                 checkpoint_config=air.CheckpointConfig(
                     # save the best checkpoint based on the test accuracy
                     num_to_keep=1,
@@ -196,4 +203,6 @@ if __name__ == "__main__":
         analysis = tuner.fit()
 
         # save the results to a CSV file in the storage_path
-        analysis.get_dataframe().to_csv(Path(LOG_PATH) / "ray_results" / name / "results.csv")
+        analysis.get_dataframe().to_csv(
+            Path(LOG_PATH) / "ray_results" / name / "results.csv"
+        )
