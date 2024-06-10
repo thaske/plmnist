@@ -97,7 +97,7 @@ def test(trainer: pl.Trainer, seed=None):
     results["test_loss"] = trainer.callback_metrics["test_loss"].item()
     results["test_acc"] = trainer.callback_metrics["test_acc"].item()
 
-    results["training_iteration"] = trainer.current_epoch
+    results["epochs"] = trainer.current_epoch
 
     return results
 
