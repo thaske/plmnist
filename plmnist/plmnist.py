@@ -27,6 +27,7 @@ def build_model(
     learning_rate: float = LEARNING_RATE,
     dropout_prob: float = DROPOUT_PROB,
     seed: int = SEED,
+    verbose: bool = True,
 ):
     pl.seed_everything(seed)
     model = LitMNIST(
@@ -41,6 +42,8 @@ def build_model(
         accelerator="auto",
         max_epochs=max_epochs,
         logger=CSVLogger(save_dir=log_path),
+        enable_progress_bar=verbose,
+        enable_model_summary=verbose,
     )
     return trainer, model
 
@@ -73,7 +76,7 @@ def train(
 
     return trainer
 
-def test(trainer: pl.Trainer, seed=None):
+def test(trainer: pl.Trainer, seed=None, verbose=True):
     results = dict()
     results["config"] = dict()
     results["config"]["batch_size"] = trainer.model.batch_size
@@ -92,7 +95,7 @@ def test(trainer: pl.Trainer, seed=None):
     if "val_acc" in trainer.callback_metrics:
         results["val_acc"] = trainer.callback_metrics["val_acc"].item()
 
-    trainer.test(ckpt_path="best")
+    trainer.test(ckpt_path="best", verbose=verbose)
 
     results["test_loss"] = trainer.callback_metrics["test_loss"].item()
     results["test_acc"] = trainer.callback_metrics["test_acc"].item()
