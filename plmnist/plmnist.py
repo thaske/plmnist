@@ -14,6 +14,7 @@ from plmnist.config import (
     HIDDEN_SIZE,
     LEARNING_RATE,
     DROPOUT_PROB,
+    SEED
 )
 
 
@@ -25,7 +26,9 @@ def build_model(
     hidden_size: int = HIDDEN_SIZE,
     learning_rate: float = LEARNING_RATE,
     dropout_prob: float = DROPOUT_PROB,
+    seed: int = SEED,
 ):
+    pl.seed_everything(seed)
     model = LitMNIST(
         data_dir=data_dir,
         batch_size=batch_size,
@@ -41,8 +44,8 @@ def build_model(
     )
     return trainer, model
 
-def run_training(trainer: pl.Trainer, model: pl.LightningModule):
-    trainer.fit(model)
+def run_training(trainer: pl.Trainer, model: pl.LightningModule, **kwargs):
+    trainer.fit(model, **kwargs)
     return trainer
 
 def train(
@@ -53,6 +56,7 @@ def train(
     hidden_size: int = HIDDEN_SIZE,
     learning_rate: float = LEARNING_RATE,
     dropout_prob: float = DROPOUT_PROB,
+    seed: int = SEED,
 ):
     trainer, model = build_model(
         max_epochs=max_epochs,
@@ -62,6 +66,7 @@ def train(
         hidden_size=hidden_size,
         learning_rate=learning_rate,
         dropout_prob=dropout_prob,
+        seed=seed,
     )
 
     trainer = run_training(trainer, model)
