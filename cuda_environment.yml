@@ -5,6 +5,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.11
+  - pip
   - numpy=1.24.0
   - pytorch::pytorch
   - pytorch::torchvision
