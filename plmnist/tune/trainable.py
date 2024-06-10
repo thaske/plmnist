@@ -22,9 +22,6 @@ class MNISTTrainable(Trainable):
 
     def setup(self, config: dict):
         hide_logs()
-        # first, verify the config is correct. we disable add_defaults since we provide all options here.
-        verify_config(config, add_defaults=False)
-
         # create the model and the pytorch lightning trainer
         self.seed = config["seed"]
         self.config = config
