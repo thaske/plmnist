@@ -81,8 +81,11 @@ def test(trainer: pl.Trainer, seed=None):
     if seed is not None:
         results["config"]["seed"] = seed
 
-    results["val_loss"] = trainer.callback_metrics["val_loss"].item()
-    results["val_acc"] = trainer.callback_metrics["val_acc"].item()
+    if "val_loss" in trainer.callback_metrics:
+        results["val_loss"] = trainer.callback_metrics["val_loss"].item()
+    
+    if "val_acc" in trainer.callback_metrics:
+        results["val_acc"] = trainer.callback_metrics["val_acc"].item()
 
     trainer.test(ckpt_path="best")
 
