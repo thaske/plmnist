@@ -26,8 +26,6 @@ logger = logging.getLogger(__name__)
 
 # define the search space for the hyperparameter tuning
 parameter_space = dict(
-    log_path=LOG_PATH,
-    data_dir=DATA_PATH,
     batch_size=BATCH_SIZE,
     hidden_size=tune.qlograndint(16, 64, 16),
     learning_rate=tune.qloguniform(1e-8, 1e-1, 1e-8),
@@ -38,8 +36,6 @@ parameter_space = dict(
 # define the default configuration for the training process
 #   note that this must be within the search space defined above
 default_config = dict(
-    log_path=LOG_PATH,
-    data_dir=DATA_PATH,
     batch_size=BATCH_SIZE,
     hidden_size=HIDDEN_SIZE,
     learning_rate=LEARNING_RATE,
@@ -52,8 +48,10 @@ default_config = dict(
 #   note the maximum number of epochs is then `STEP_EPOCHS * MAX_STEPS`
 STEP_EPOCHS = 2
 MAX_STEPS = 5
-MAX_HOURS = 1
-NUM_SAMPLES = 50
+MAX_HOURS = 15 / 60  # 15 minutes
+NUM_SAMPLES = 1000  # max number of samples to run
+
+RAY_RESULTS_DIR = (Path(LOG_PATH) / "ray_results").resolve()
 
 
 # now the main part: defining the tune.Trainable class
@@ -66,6 +64,8 @@ class MNISTTrainable(tune.Trainable):
     #   to allow for saving and restoring the state of the trainable
     #   this is useful for using fancier search/scheduling algorithms that can do early stopping/resuming.
 
+    _session_name: Optional[str]  # will be set once the experiment is started
+
     def setup(self, config: dict):
         # first, verify the config is correct. we disable add_defaults since we provide all options here.
         verify_config(config, add_defaults=False)
@@ -76,7 +76,11 @@ class MNISTTrainable(tune.Trainable):
         self.seed = config["seed"]
         self.config = config
         self.trainer, self.model = build_model(
-            max_epochs=STEP_EPOCHS, verbose=False, **self.config
+            max_epochs=STEP_EPOCHS,
+            verbose=False,
+            log_path=RAY_RESULTS_DIR / self._session_name,
+            # log_path=self.logdir,  # if you don't plan to use checkpoints after tuning
+            **self.config,
         )
         self.resume_ckpt_path = None
 
@@ -129,7 +133,7 @@ class MNISTTrainable(tune.Trainable):
 # now we run the tuning process
 if __name__ == "__main__":
     # first, initialize the ray worker. Note you have to run `ray start --head` before running this script.
-    ray.init(address="auto", _redis_password=os.environ.get("RAY_REDIS_PASSWORD", None))
+    ray.init(address="auto")
 
     if "--test" in sys.argv:
         # if "--test" is passed, validate that the class is working as expected
@@ -146,6 +150,9 @@ if __name__ == "__main__":
         now = datetime.now()
         end = now + timedelta(hours=MAX_HOURS)
         name = "mnist_" + now.strftime("%Y%m%d-%H%M%S")
+
+        # add the name to the trainable class so we can store logs there
+        MNISTTrainable._session_name = name
 
         logger.info(
             f"Starting tuning experiment {name}, ending in {MAX_HOURS} hours ({end})"
@@ -185,9 +192,7 @@ if __name__ == "__main__":
             run_config=air.RunConfig(
                 # the RunConfig class is where experiment options are given.
                 name=name,
-                storage_path=(
-                    Path(LOG_PATH) / "ray_results"
-                ).resolve(),  # if not specified, ray will store results in ~/ray_results
+                storage_path=RAY_RESULTS_DIR,  # if not specified, ray will store results in ~/ray_results
                 stop=dict(training_iteration=MAX_STEPS),  # stop after MAX_STEPS steps
                 checkpoint_config=air.CheckpointConfig(
                     # save the best checkpoint based on the test accuracy
