@@ -1,8 +1,11 @@
 import os
+from pathlib import Path
 
-DATA_PATH = str(os.environ.get("PLM_DATA_PATH", "./data"))
-LOG_PATH = str(os.environ.get("PLM_LOG_PATH", "./logs"))
-RESULT_PATH = str(os.environ.get("PLM_RESULT_PATH", "./results"))
+repo_root = Path(__file__).parent.parent
+
+DATA_PATH = str(os.environ.get("PLM_DATA_PATH", repo_root / "data"))
+LOG_PATH = str(os.environ.get("PLM_LOG_PATH", repo_root / "logs"))
+RESULT_PATH = str(os.environ.get("PLM_RESULT_PATH", repo_root / "results"))
 NUM_EPOCHS = int(os.environ.get("PLM_NUM_EPOCHS", 3))
 BATCH_SIZE = int(os.environ.get("PLM_BATCH_SIZE", 256))
 HIDDEN_SIZE = int(os.environ.get("PLM_HIDDEN_SIZE", 64))
