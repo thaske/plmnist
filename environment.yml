@@ -13,3 +13,8 @@ dependencies:
   - conda-forge::signac
   - conda-forge::signac-flow
   - conda-forge::signac-dashboard
+  - pip:
+    - ray[tune]
+    - hyperopt
+    - tensorboard
+    - -e .
