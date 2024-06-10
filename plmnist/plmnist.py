@@ -130,7 +130,7 @@ def write(
 
 
 
-def verify_config(config: dict):
+def verify_config(config: dict, add_defaults: bool=True):
     signature = inspect.signature(train)
     for key in config:
         assert key in signature.parameters, f"Unknown parameter found: {key}"
@@ -140,12 +140,12 @@ def verify_config(config: dict):
                 f"expected {signature.parameters[key].annotation}! "
                  "This may cause errors downstream."
             )
-
-    for key in signature.parameters:
-        if key not in config:
-            logger.info(
-                f"Parameter {key} not found in config, "
-                f"using default value: {signature.parameters[key].default}"
-            )
-            config[key] = signature.parameters[key].default
+    if add_defaults:
+        for key in signature.parameters:
+            if key not in config:
+                logger.info(
+                    f"Parameter {key} not found in config, "
+                    f"using default value: {signature.parameters[key].default}"
+                )
+                config[key] = signature.parameters[key].default
     return config
