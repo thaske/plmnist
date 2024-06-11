@@ -1,15 +1,17 @@
-import os
 from pathlib import Path
-
-os.environ["TUNE_WARN_EXCESSIVE_EXPERIMENT_CHECKPOINT_SYNC_THRESHOLD_S"] = "0"
 
 from ray import air, tune
 from ray.tune.search.hyperopt import HyperOptSearch
 from ray.tune.schedulers import AsyncHyperBandScheduler
 
-from plmnist.config import LOG_PATH
-
-from plmnist.tune.parameter_space import default_config
+from plmnist.config import (
+    BATCH_SIZE,
+    HIDDEN_SIZE,
+    LEARNING_RATE,
+    DROPOUT_PROB,
+    SEED,
+    LOG_PATH,
+)
 
 
 # number of epochs per tuning step
@@ -29,6 +31,25 @@ RAY_RESULTS_DIR = (Path(LOG_PATH) / "ray_results").resolve()
 
 # mode and metric for the search algorithm
 MODE, METRIC = "max", "test_acc"
+
+# define the search space for the hyperparameter tuning
+parameter_space = dict(
+    batch_size=BATCH_SIZE,
+    hidden_size=tune.qlograndint(16, 64, 16),
+    learning_rate=tune.qloguniform(1e-8, 1e-1, 1e-8),
+    dropout_prob=tune.quniform(0.0, 0.7, 0.1),
+    seed=SEED,
+)
+
+# define the default configuration for the training process
+#   note that this must be within the search space defined above
+default_config = dict(
+    batch_size=BATCH_SIZE,
+    hidden_size=HIDDEN_SIZE,
+    learning_rate=LEARNING_RATE,
+    dropout_prob=DROPOUT_PROB,
+    seed=SEED,
+)
 
 # define the search algorithm
 search_alg = HyperOptSearch(
