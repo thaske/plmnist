@@ -2,7 +2,7 @@ from typing import Optional
 from pathlib import Path
 
 from ray.tune import Trainable
-from plmnist.plmnist import build_model, run_training, verify_config, test
+from plmnist.plmnist import build_model, run_training, test
 
 from plmnist.tune.config import STEP_EPOCHS, RAY_RESULTS_DIR
 from plmnist.tune.utils import hide_logs
@@ -44,10 +44,8 @@ class MNISTTrainable(Trainable):
         # clear the resume_ckpt_path so we don't accidentally resume from the old checkpoint next step
         self.resume_ckpt_path = None
 
-        # test the model and return the results
-        results = test(
-            self.trainer, self.seed, verbose=False
-        )  # results will be reported in a table
+        # test the model and return the results dictionary
+        results = test(self.trainer, self.seed, verbose=False)
         return results
 
     def reset_config(self, new_config):
