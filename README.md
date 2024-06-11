@@ -4,6 +4,30 @@ This repository accompanies the AI4OPT ML Methodology tutorial on hyperparameter
 
 ## Installation
 
+0. Install `conda` if not already installed.
+<details><summary>Using Mambaforge is recommended...</summary>
+
+___
+First download the appropriate installer script for your system:
+
+| OS      | Architecture          | Download  |
+| --------|-----------------------|-----------|
+| Linux   | x86_64 (amd64)        | [Mambaforge-Linux-x86_64](https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh) |
+| Linux   | aarch64 (arm64)       | [Mambaforge-Linux-aarch64](https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-aarch64.sh) |
+| Linux   | ppc64le (POWER8/9)    | [Mambaforge-Linux-ppc64le](https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-ppc64le.sh) |
+| OS X    | x86_64                | [Mambaforge-MacOSX-x86_64](https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-MacOSX-x86_64.sh) |
+| OS X    | arm64 (Apple Silicon) | [Mambaforge-MacOSX-arm64](https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-MacOSX-arm64.sh) |
+| Windows | x86_64                | [Mambaforge-Windows-x86_64](https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Windows-x86_64.exe) |
+
+Then run the installer script and follow the instructions:
+```bash
+bash <full/path/to/script>
+```
+
+In the commands below, replace `conda env create` with `mamba env create` for faster package installation.
+___
+</details>
+
 1. Clone the repository and navigate to the directory:
 ```bash
 git clone git@github.com:klamike/plmnist.git
@@ -12,7 +36,7 @@ cd plmnist
 
 2. Install the required packages:
 ```bash
-# for CPU:
+# for CPU-only:
 conda env create -f environment.yml
 # for CUDA GPU:
 conda env create -f cuda_environment.yml
