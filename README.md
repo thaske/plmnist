@@ -19,9 +19,9 @@ First download the appropriate installer script for your system:
 | OS X    | arm64 (Apple Silicon) | [Mambaforge-MacOSX-arm64](https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-MacOSX-arm64.sh) |
 | Windows | x86_64                | [Mambaforge-Windows-x86_64](https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Windows-x86_64.exe) |
 
-Then run the installer script and follow the instructions:
+Then run the installer script and follow the instructions (replace `<path to script>` with the full path to the downloaded script):
 ```bash
-bash <full/path/to/script>
+bash <path to script>
 ```
 
 In the commands below, replace `conda env create` with `mamba env create` for faster package installation.
@@ -49,6 +49,8 @@ conda activate plmnist
 
 ## CPU Usage
 
+Use these instructions if you're running on your laptop.
+
 1. Start Ray
 ```bash
 ray start --head
@@ -61,29 +63,27 @@ python -m plmnist.tune
 
 ## SLURM Usage
 
+Use these instructions if you're running on a single (potentially multi-GPU) node on SLURM.
+
 0. Checkout the [`tune_slurm`](https://github.com/klamike/plmnist/tree/tune_slurm) branch:
 ```bash
 git checkout tune_slurm
 ```
 
-1. Generate a Redis password:
-```bash
-export redis_password = $(uuidgen)
-echo $redis_password
-```
-
-2. Start Ray
+1. Start Ray
 ```bash
 ray start --head
 ```
 
-3. Run the hyperparameter tuning script:
+2. Run the hyperparameter tuning script:
 ```bash
 python -m plmnist.tune
 ```
 
 
 ## Multi-Node Usage
+
+Use these instructions if you're running on multiple nodes on SLURM. You'll need to reserve one CPU head node and a few GPU worker nodes.
 
 0. Checkout the [`tune_slurm`](https://github.com/klamike/plmnist/tree/tune_slurm) branch:
 ```bash
@@ -101,12 +101,12 @@ echo $redis_password
 hostname -I
 ```
 
-3. Start Ray on the head node:
+3. Start Ray on the head node (replace `<redis password>` with the generated password):
 ```bash
 ray start --head --redis-password=<redis password>
 ```
 
-4. **On each worker node**, link the GPU worker to the head node:
+4. **On each worker node**, link the GPU worker to the head node (replace `<head node ip address>` and `<redis password>`):
 ```bash
 ray start --address=<head node ip address> --redis-password=<redis password>
 ```
