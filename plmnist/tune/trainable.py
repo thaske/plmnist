@@ -18,7 +18,7 @@ class MNISTTrainable(Trainable):
     #   to allow for saving and restoring the state of the trainable
     #   this is useful for using fancier search/scheduling algorithms that can do early stopping/resuming.
 
-    _session_name: Optional[str]  # will be set once the experiment is started
+    _session_name: Optional[str] = None  # will be set once the experiment is started
 
     def setup(self, config: dict):
         hide_logs()
@@ -28,8 +28,13 @@ class MNISTTrainable(Trainable):
         self.trainer, self.model = build_model(
             max_epochs=STEP_EPOCHS,
             verbose=False,
-            log_path=RAY_RESULTS_DIR / self._session_name,
-            # log_path=self.logdir,  # if you don't plan to use checkpoints after tuning
+            log_path=(
+                # if session_name is given, save checkpoints persistently
+                # otherwise, checkpoints will be deleted upon tuning exit
+                (RAY_RESULTS_DIR / self._session_name)
+                if self._session_name is not None
+                else self.logdir
+            ),
             **self.config,
         )
         self.resume_ckpt_path = None

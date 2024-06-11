@@ -1,5 +1,7 @@
 def hide_logs():
-    import logging, warnings
+    import logging, warnings, os
+
+    os.environ["TUNE_WARN_EXCESSIVE_EXPERIMENT_CHECKPOINT_SYNC_THRESHOLD_S"] = "0"
 
     # needs to be run on each worker
     warnings.filterwarnings("ignore", "Checkpoint directory .* exists and is not empty")
