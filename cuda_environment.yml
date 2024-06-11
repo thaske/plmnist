@@ -12,9 +12,6 @@ dependencies:
   - pytorch::pytorch-cuda=12.1
   - conda-forge::pytorch-lightning
   - conda-forge::matplotlib
-  - conda-forge::signac
-  - conda-forge::signac-flow
-  - conda-forge::signac-dashboard
   - pip:
     - ray[tune]
     - hyperopt
