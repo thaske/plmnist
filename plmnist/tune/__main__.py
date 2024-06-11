@@ -1,6 +1,4 @@
-import sys
 from pathlib import Path
-from contextlib import redirect_stdout
 
 import ray
 from ray.tune import Tuner
@@ -38,10 +36,7 @@ if __name__ == "__main__":
     )
 
     # finally, run the tuning process
-    with redirect_stdout(
-        (Path(LOG_PATH) / "ray_results" / name / "stdout.log").open("w")
-    ):
-        analysis = tuner.fit()
+    analysis = tuner.fit()
 
     # save the results to a CSV file in the storage_path
     analysis.get_dataframe().to_csv(
