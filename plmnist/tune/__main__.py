@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import ray
@@ -14,7 +15,7 @@ from plmnist.tune.config import tune_config, get_run_config
 if __name__ == "__main__":
     hide_logs()
     # first, initialize the ray worker. Note you have to run `ray start --head` before running this script.
-    ray.init(address="auto")
+    ray.init(address="auto", _redis_password=os.environ.get("RAY_redis_password", None))
 
     # run the tuning process
     name, end = make_trial_name()
