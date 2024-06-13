@@ -47,6 +47,11 @@ conda env create -f cuda_environment.yml
 conda activate plmnist
 ```
 
+4. Download the data:
+```bash
+python -m plmnist.download
+```
+
 ## CPU Usage
 
 Use these instructions if you're running on your laptop.
