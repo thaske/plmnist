@@ -30,7 +30,7 @@ NUM_SAMPLES = 1000  # max number of samples to run
 RAY_RESULTS_DIR = (Path(LOG_PATH) / "ray_results").resolve()
 
 # mode and metric for the search algorithm
-MODE, METRIC = "max", "test_acc"
+MODE, METRIC = "max", "val_acc"
 
 # define the search space for the hyperparameter tuning
 parameter_space = dict(
