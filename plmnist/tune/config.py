@@ -56,6 +56,7 @@ search_alg = HyperOptSearch(
     # HyperOpt is a TPE-based search algorithm
     points_to_evaluate=[default_config],  # start with the default config(s)
     n_initial_points=5,  # and add a few more random points before running the optimization
+    random_state_seed=SEED,
 )
 
 # define the scheduler
