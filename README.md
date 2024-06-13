@@ -1,11 +1,11 @@
 # Hyperparameter Tuning Tutorial: Learning MNIST with PyTorch Lightning and Ray Tune
 
-This repository accompanies the AI4OPT ML Methodology tutorial on hyperparameter tuning with PyTorch Lightning and Ray Tune.
+This repository demonstrates how to use Ray Tune to perform hyperparameter tuning. The task in this case is to train a simple neural network on the MNIST dataset using PyTorch Lightning. This allows to easily scale from running locally on a laptop to running on a multi-node cluster.
 
 ## Installation
 
 0. Install `conda` if not already installed.
-<details><summary>Using Mambaforge is recommended...</summary>
+<details><summary>Using Mambaforge is recommended</summary>
 
 ___
 First download the appropriate installer script for your system:
