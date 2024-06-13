@@ -35,7 +35,7 @@ MODE, METRIC = "max", "test_acc"
 # define the search space for the hyperparameter tuning
 parameter_space = dict(
     batch_size=BATCH_SIZE,
-    hidden_size=tune.qlograndint(16, 64, 16),
+    hidden_size=tune.qlograndint(16, 128, 16),
     learning_rate=tune.qloguniform(1e-8, 1e-1, 1e-8),
     dropout_prob=tune.quniform(0.0, 0.7, 0.1),
     seed=SEED,
