@@ -45,9 +45,9 @@ parameter_space = dict(
 #   note that this must be within the search space defined above
 default_config = dict(
     batch_size=BATCH_SIZE,
-    hidden_size=HIDDEN_SIZE,
-    learning_rate=LEARNING_RATE,
-    dropout_prob=DROPOUT_PROB,
+    hidden_size=128,
+    learning_rate=1e-5,
+    dropout_prob=0.5,
     seed=SEED,
 )
 
